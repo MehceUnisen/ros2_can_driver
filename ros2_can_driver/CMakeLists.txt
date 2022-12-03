@@ -17,30 +17,54 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(ros2_can_msgs REQUIRED)
 
-set(HEADER_FILES
-        "include/ros2_can_driver/can_wrapper.h"
+set(RECEIVER_HEADER_FILES
+        include/ros2_can_driver/can_receiver.h
         )
 
-set(SOURCE_FILES
-        src/main.cpp
-        src/can_wrapper.cpp
+set(SENDER_HEADER_FILES
+       include/ros2_can_driver/can_sender.h
+       )
+
+set(RECEIVER_SOURCE_FILES
+        src/can_receiver_node.cpp
+        src/can_receiver.cpp
         )
 
-add_executable(ros2_can_driver_exe
-        ${SOURCE_FILES}
+set(SENDER_SOURCE_FILES
+        src/can_sender.cpp
+        src/can_sender_node.cpp
         )
 
-ament_target_dependencies(ros2_can_driver_exe
+add_executable(ros2_can_receiver_exe
+        ${RECEIVER_SOURCE_FILES}
+        ${RECEIVER_HEADER_FILES}
+        )
+
+add_executable(ros2_can_sender_exe
+        ${RECEIVER_SOURCE_FILES}
+        )
+
+ament_target_dependencies(ros2_can_receiver_exe
+        rclcpp
+        std_msgs
+        ros2_can_msgs
+        )
+
+ament_target_dependencies(ros2_can_sender_exe
         rclcpp
         std_msgs
         ros2_can_msgs
         )
 
 install(TARGETS
-        ros2_can_driver_exe
+        ros2_can_receiver_exe
         DESTINATION lib/${PROJECT_NAME}
         )
 
+install(TARGETS
+        ros2_can_sender_exe
+        DESTINATION lib/${PROJECT_NAME}
+        )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

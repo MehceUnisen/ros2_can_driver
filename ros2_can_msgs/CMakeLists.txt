@@ -12,7 +12,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-        "msg/CanMessages.msg"
+        "msg/Frame.msg"
         DEPENDENCIES std_msgs
   )
 
