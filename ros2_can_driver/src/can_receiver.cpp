@@ -19,7 +19,7 @@ CanReceiver::CanReceiver() :
         can_dev_{"can0"},
 
         can_recv_topic_{this->declare_parameter(
-                        "/can_driver/received_frame",
+                        "can_recv_topic_",
             ParameterValue{"/can_driver/received_frame"},
             ParameterDescriptor{})
                 .get<std::string>()},

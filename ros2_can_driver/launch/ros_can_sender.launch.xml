@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="ros2_can_sender_param_path" default="$(find-pkg-share ros2_can_driver)/config/ros2_can_sender.param.yaml"/>
+
+    <!-- vehicle info -->
+    <!--    <arg name="vehicle_info_param_file" default="$(find-pkg-share vehicle_info_util)/config/vehicle_info.param.yaml"/>-->
+
+    <!-- ros2 can receiver node -->
+    <node pkg="ros2_can_driver" exec="ros2_can_sender_exe" name="ros2_can_sender" output="screen">
+        <param from="$(var ros2_can_sender_param_path)"/>
+        <!--        <param from="$(var vehicle_info_param_file)"/>-->
+    </node>
+
+</launch>
