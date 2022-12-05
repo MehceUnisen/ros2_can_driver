@@ -75,7 +75,7 @@ bool CanSender::closeSocket() {
     return true;
 }
 
-bool CanSender::sendData() {
+bool CanSender::sendData(struct can_frame can_frame_) {
 
     if (write(sock_res_, &can_frame_, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
         perror("Write");
@@ -87,18 +87,19 @@ bool CanSender::sendData() {
 void CanSender::receiveFrameCallback(ros2_can_msgs::msg::Frame::ConstSharedPtr msg)
 {
     std::cout << "callback geldi haniiiiiiiim";
-    can_id = static_cast<int>(msg->id);
-    can_dlc = static_cast<uint8_t>(msg->dlc);
+    msg_can_frame_ = msg;
+    can_id = static_cast<int>(msg_can_frame_->id);
+    can_dlc = static_cast<uint8_t>(msg_can_frame_->dlc);
 
     for (int i = 0; i < 8; ++i) {
-        can_msg_[i] = msg->data[i];
-        can_frame_.data[i] = msg->data[i];
+        can_frame_.data[i] = msg_can_frame_->data[i];
     }
 
-    can_frame_.can_id = can_id;
-    can_frame_.can_dlc = can_dlc;
 
-    if(!sendData()) {
-        RCLCPP_WARN(this->get_logger(), "Error sending data\n");
+    if(!sendData(can_frame_)) {
+        RCLCPP_WARN(this->get_logger(), "Error sending CanId data\n");
+    }
+    else{
+        RCLCPP_WARN(this->get_logger(), "SSSSSSSSSSending CanId data\n");
     }
 }

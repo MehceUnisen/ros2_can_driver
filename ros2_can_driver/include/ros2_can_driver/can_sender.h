@@ -40,12 +40,12 @@ private:
 
   rclcpp::Subscription<ros2_can_msgs::msg::Frame>::SharedPtr sub_send_frame_;
   rclcpp::TimerBase::SharedPtr timer_;
-
+  ros2_can_msgs::msg::Frame::ConstSharedPtr msg_can_frame_;
   uint8_t can_msg_[8] {};
 
   bool openSocket();
   bool closeSocket();
-  bool sendData();
+  bool sendData(struct can_frame can_frame_);
   void timerCallback();
   void receiveFrameCallback(ros2_can_msgs::msg::Frame::ConstSharedPtr msg);
 
