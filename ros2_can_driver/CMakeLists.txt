@@ -41,7 +41,8 @@ add_executable(ros2_can_receiver_exe
         )
 
 add_executable(ros2_can_sender_exe
-        ${RECEIVER_SOURCE_FILES}
+        ${SENDER_SOURCE_FILES}
+        ${SENDER_HEADER_FILES}
         )
 
 ament_target_dependencies(ros2_can_receiver_exe

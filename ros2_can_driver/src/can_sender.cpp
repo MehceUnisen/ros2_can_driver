@@ -19,8 +19,8 @@ CanSender::CanSender() :
         can_dev_{"can0"},
 
         can_send_topic_{this->declare_parameter(
-                        "can_send_topic",
-            ParameterValue{"/can_wrapper/send_frame"},
+                        "can_send_topic_",
+            ParameterValue{"/can_driver/send_frame"},
             ParameterDescriptor{})
                 .get<std::string>()},
 
@@ -44,7 +44,7 @@ CanSender::CanSender() :
 }
 
 void CanSender::timerCallback() {
-  std::cout << "Timer Callback\n";
+    std::cout << "Timer Callback\n";
 }
 
 bool CanSender::openSocket() {
@@ -86,18 +86,19 @@ bool CanSender::sendData() {
 
 void CanSender::receiveFrameCallback(ros2_can_msgs::msg::Frame::ConstSharedPtr msg)
 {
-  can_id = static_cast<int>(msg->id);
-  can_dlc = static_cast<uint8_t>(msg->dlc);
+    std::cout << "callback geldi haniiiiiiiim";
+    can_id = static_cast<int>(msg->id);
+    can_dlc = static_cast<uint8_t>(msg->dlc);
 
-  for (int i = 0; i < 8; ++i) {
-    can_msg_[i] = msg->data[i];
-    can_frame_.data[i] = msg->data[i];
-  }
+    for (int i = 0; i < 8; ++i) {
+        can_msg_[i] = msg->data[i];
+        can_frame_.data[i] = msg->data[i];
+    }
 
-  can_frame_.can_id = can_id;
-  can_frame_.can_dlc = can_dlc;
+    can_frame_.can_id = can_id;
+    can_frame_.can_dlc = can_dlc;
 
-  if(!sendData()) {
-    RCLCPP_WARN(this->get_logger(), "Error sending data\n");
-  }
+    if(!sendData()) {
+        RCLCPP_WARN(this->get_logger(), "Error sending data\n");
+    }
 }

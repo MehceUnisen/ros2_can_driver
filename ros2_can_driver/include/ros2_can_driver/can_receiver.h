@@ -28,12 +28,17 @@ public:
       closeSocket();
   }
 
-  bool openSocket();
-  bool closeSocket();
-  bool readData();
-  void timerCallback();
+
+
 
 private:
+    bool openSocket();
+    bool closeSocket();
+    bool readData();
+    void timerCallback();
+    void publishError();
+    void publishData();
+
     int sock_res_;
     int can_id;
     int can_dlc;
@@ -44,6 +49,7 @@ private:
 
     const char* can_dev_; //it defined as char* to be able to work with strcpy
     std::string can_recv_topic_;
+
 
     ros2_can_msgs::msg::Frame msg_can_frame_;
     rclcpp::Publisher<ros2_can_msgs::msg::Frame>::SharedPtr pub_recv_frame_;
