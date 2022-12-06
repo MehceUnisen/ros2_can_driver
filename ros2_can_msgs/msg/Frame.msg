@@ -1,4 +1,5 @@
 std_msgs/Header header
+bool send_flag
 uint32 id
 bool is_error
 bool is_fd_frame

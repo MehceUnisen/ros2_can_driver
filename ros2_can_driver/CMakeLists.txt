@@ -35,6 +35,16 @@ set(SENDER_SOURCE_FILES
         src/can_sender_node.cpp
         )
 
+
+set(TRANSCIEVER_SOURCE_FILES
+        src/can_transciever.cpp
+        src/can_transciever_node.cpp
+        )
+
+set(TRANSCIEVER_HEADER_FILES
+        include/ros2_can_driver/can_transciever.h
+        )
+
 add_executable(ros2_can_receiver_exe
         ${RECEIVER_SOURCE_FILES}
         ${RECEIVER_HEADER_FILES}
@@ -43,6 +53,11 @@ add_executable(ros2_can_receiver_exe
 add_executable(ros2_can_sender_exe
         ${SENDER_SOURCE_FILES}
         ${SENDER_HEADER_FILES}
+        )
+
+add_executable(ros2_can_transciever_exe
+        ${TRANSCIEVER_SOURCE_FILES}
+        ${TRANSCIEVER_HEADER_FILES}
         )
 
 ament_target_dependencies(ros2_can_receiver_exe
@@ -57,6 +72,12 @@ ament_target_dependencies(ros2_can_sender_exe
         ros2_can_msgs
         )
 
+ament_target_dependencies(ros2_can_transciever_exe
+        rclcpp
+        std_msgs
+        ros2_can_msgs
+        )
+
 install(TARGETS
         ros2_can_receiver_exe
         DESTINATION lib/${PROJECT_NAME}
@@ -64,6 +85,11 @@ install(TARGETS
 
 install(TARGETS
         ros2_can_sender_exe
+        DESTINATION lib/${PROJECT_NAME}
+        )
+
+install(TARGETS
+        ros2_can_transciever_exe
         DESTINATION lib/${PROJECT_NAME}
         )
 

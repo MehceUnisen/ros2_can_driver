@@ -28,9 +28,6 @@ public:
       closeSocket();
   }
 
-
-
-
 private:
     bool openSocket();
     bool closeSocket();
@@ -51,7 +48,7 @@ private:
     std::string can_recv_topic_;
 
 
-//    ros2_can_msgs::msg::Frame msg_can_frame_;
+    ros2_can_msgs::msg::Frame msg_can_frame_;
     rclcpp::Publisher<ros2_can_msgs::msg::Frame>::SharedPtr pub_recv_frame_;
     rclcpp::TimerBase::SharedPtr timer_;
 

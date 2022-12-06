@@ -1,0 +1,4 @@
+/**:
+  ros__parameters:
+    can_send_topic_: "/can_driver/send_frame"
+    can_recv_topic_: "/can_driver/received_frame"

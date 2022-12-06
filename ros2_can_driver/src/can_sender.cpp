@@ -41,30 +41,38 @@ CanSender::CanSender() :
     else {
       RCLCPP_INFO(this->get_logger(), "Connected to CAN device\n");
     }
+
+    while(1){
+      sendData();
+    }
+
 }
 
 void CanSender::timerCallback() {
-    std::cout << "Timer Callback\n";
+//    std::cout << "Timer Callback\n";
+// sendData();
 }
 
-bool CanSender::openSocket() {
-    if ((sock_res_ = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-        RCLCPP_INFO(this->get_logger(), "socket");
-        return false;
-    }
+bool CanSender::openSocket()
+{
+      if ((sock_res_ = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
+          RCLCPP_INFO(this->get_logger(), "socket");
+          return false;
+      }
 
-    strcpy(ifr_.ifr_name, can_dev_ );
-    ioctl(sock_res_, SIOCGIFINDEX, &ifr_);
+      strcpy(ifr_.ifr_name, can_dev_ );
+      ioctl(sock_res_, SIOCGIFINDEX, &ifr_);
 
-    memset(&sock_addr_can_, 0, sizeof(sock_addr_can_));
-    sock_addr_can_.can_family = AF_CAN;
-    sock_addr_can_.can_ifindex = ifr_.ifr_ifindex;
+      memset(&sock_addr_can_, 0, sizeof(sock_addr_can_));
+      sock_addr_can_.can_family = AF_CAN;
+      sock_addr_can_.can_ifindex = ifr_.ifr_ifindex;
 
-    if (bind(sock_res_, (struct sockaddr *)&sock_addr_can_, sizeof(sock_addr_can_)) < 0) {
-        RCLCPP_INFO(this->get_logger(), "bind");
-        return false;
-    }
-    return true;
+      if (bind(sock_res_, (struct sockaddr *)&sock_addr_can_, sizeof(sock_addr_can_)) < 0) {
+          RCLCPP_INFO(this->get_logger(), "bind");
+          return false;
+      }
+      return true;
+
 }
 
 bool CanSender::closeSocket() {
@@ -76,7 +84,10 @@ bool CanSender::closeSocket() {
 }
 
 bool CanSender::sendData() {
-
+//    can_frame_.data[0] = 69;
+//    can_frame_.can_id = 69;
+//    can_frame_.can_dlc = 8;
+    std::cout << "SOCK CIKAR = " << sock_res_;
     if (write(sock_res_, &can_frame_, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
         perror("Write");
         return false;
@@ -87,21 +98,17 @@ bool CanSender::sendData() {
 void CanSender::receiveFrameCallback(ros2_can_msgs::msg::Frame::ConstSharedPtr msg)
 {
     msg_can_frame_ = msg;
-//    can_id = static_cast<int>(msg_can_frame_->id);
-//    can_dlc = static_cast<uint8_t>(msg_can_frame_->dlc);
-    can_frame_.can_id = msg_can_frame_->id;
-    can_frame_.can_dlc = msg_can_frame_->dlc;
+      can_frame_.can_id = msg_can_frame_->id;
+      can_frame_.can_dlc = msg_can_frame_->dlc;
 
-    for (int i = 0; i < 8; ++i) {
+      for (int i = 0; i < 8; ++i) {
         can_frame_.data[i] = msg_can_frame_->data[i];
-    }
-
+      }
 
     if(!sendData()) {
         RCLCPP_WARN(this->get_logger(), "Error sending data\n");
     }
     else{
-//        RCLCPP_WARN(this->get_logger(), "SSSSSSSSSSending CanId data\n");
 
     }
 }
