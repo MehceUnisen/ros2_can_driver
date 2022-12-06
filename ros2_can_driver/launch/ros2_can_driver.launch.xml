@@ -5,7 +5,7 @@
     <arg name="ros2_can_recv_param_path" default="$(find-pkg-share ros2_can_driver)/config/ros2_can_receiver.param.yaml"/>
 
     <!-- ros2 can receiver node -->
-    <node pkg="ros2_can_driver" exec="ros2_can_sender_exe" name="ros2_can_sender" output="screen">
+    <node pkg="ros2_can_driver" exec="ros_can_sender_exe" name="ros2_can_sender" output="screen">
         <param from="$(var ros2_can_sender_param_path)"/>
     </node>
     <!-- ros2 can receiver node -->

@@ -40,7 +40,7 @@ private:
     void publishData();
 
     int sock_res_;
-    int can_id;
+    uint32_t can_id;
     int can_dlc;
 
     struct sockaddr_can sock_addr_can_;
@@ -51,7 +51,7 @@ private:
     std::string can_recv_topic_;
 
 
-    ros2_can_msgs::msg::Frame msg_can_frame_;
+//    ros2_can_msgs::msg::Frame msg_can_frame_;
     rclcpp::Publisher<ros2_can_msgs::msg::Frame>::SharedPtr pub_recv_frame_;
     rclcpp::TimerBase::SharedPtr timer_;
 

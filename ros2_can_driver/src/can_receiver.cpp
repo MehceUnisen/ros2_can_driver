@@ -76,9 +76,10 @@ bool CanReceiver::closeSocket() {
 
 bool CanReceiver::readData() {
     while(1) {
-        RCLCPP_INFO(this->get_logger(), "RECEIVED A FRAME");
-        int nbytes = read(sock_res_, &can_frame_, sizeof(struct can_frame));
+//        RCLCPP_INFO(this->get_logger(), "RECEIVED A FRAME");
 
+        int nbytes = read(sock_res_, &can_frame_, sizeof(struct can_frame));
+        can_id = can_frame_.can_id & 536870911;
         if (nbytes < 0) {
             RCLCPP_WARN(this->get_logger(), "READ ERROR");
             publishError();
@@ -90,7 +91,7 @@ bool CanReceiver::readData() {
 }
 
 void CanReceiver::publishError() {
-
+ros2_can_msgs::msg::Frame msg_can_frame_;
     msg_can_frame_.header.set__frame_id(static_cast<std::string>(can_recv_topic_));
     msg_can_frame_.header.stamp.set__sec(static_cast<int32_t>(this->get_clock()->now().seconds()));
     msg_can_frame_.header.stamp.set__nanosec(static_cast<uint32_t>(this->get_clock()->now().nanoseconds()));
@@ -100,11 +101,12 @@ void CanReceiver::publishError() {
 }
 
 void CanReceiver::publishData() {
+  ros2_can_msgs::msg::Frame msg_can_frame_;
     msg_can_frame_.header.set__frame_id(static_cast<std::string>(can_recv_topic_));
     msg_can_frame_.header.stamp.set__sec(static_cast<int32_t>(this->get_clock()->now().seconds()));
     msg_can_frame_.header.stamp.set__nanosec(static_cast<uint32_t>(this->get_clock()->now().nanoseconds()));
 
-    msg_can_frame_.set__id(static_cast<uint32_t>(can_frame_.can_id));
+    msg_can_frame_.set__id(static_cast<uint32_t>(this->can_id));
     msg_can_frame_.set__dlc(static_cast<uint8_t>(can_frame_.can_dlc));
     for (int i = 0; i < 8; ++i) {
       msg_can_frame_.data[i] = can_frame_.data[i];

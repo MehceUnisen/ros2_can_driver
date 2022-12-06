@@ -45,7 +45,7 @@ private:
 
   bool openSocket();
   bool closeSocket();
-  bool sendData(struct can_frame can_frame_);
+  bool sendData();
   void timerCallback();
   void receiveFrameCallback(ros2_can_msgs::msg::Frame::ConstSharedPtr msg);
 
